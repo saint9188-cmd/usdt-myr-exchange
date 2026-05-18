@@ -6,9 +6,9 @@ import './i18n/index.js';
 import LanguageToggle from './components/LanguageToggle';
 import RateDisplay from './components/RateDisplay';
 import ExchangeForm from './components/ExchangeForm';
+import { API } from './config';
 import './App.css';
 
-const API = 'http://localhost:3001';
 const socket = io(API);
 
 export default function App() {

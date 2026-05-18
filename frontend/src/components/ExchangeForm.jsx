@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import ReportModal from './ReportModal';
-
-const API = 'http://localhost:3001';
+import { API } from '../config';
 
 export default function ExchangeForm({ rate }) {
   const { t } = useTranslation();

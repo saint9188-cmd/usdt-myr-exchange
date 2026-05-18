@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-
-const API = 'http://localhost:3001';
+import { API } from '../config';
 
 export default function ReportModal({ onClose }) {
   const { t } = useTranslation();
