@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# WhatsApp session & cache (contains your auth tokens — never commit this)
+backend/whatsapp-session/
+backend/.wwebjs_auth/
+backend/.wwebjs_cache/
+
+# Database (local data)
+backend/exchange.db
+
+# Logs
+backend/server.log
+backend/server.err
+*.log
+
+# Environment variables (contains secrets)
+.env
+
+# Build output
+frontend/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled launcher (built locally)
+USDT-Exchange.exe
+Launcher.cs

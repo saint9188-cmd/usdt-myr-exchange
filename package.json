@@ -1,0 +1,11 @@
+{
+  "name": "usdt-exchange-app",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "start:backend": "node backend/server.js",
+    "start:frontend": "npm run dev --workspace=frontend",
+    "install:all": "npm install --workspace=backend && npm install --workspace=frontend"
+  }
+}
