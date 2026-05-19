@@ -6,19 +6,27 @@ const { sendMessage } = require('../whatsapp');
 // Button 1 — send daily rate announcement
 router.post('/announcement', async (req, res) => {
   try {
-    const { phone } = req.body;
+    const { phone, commission } = req.body;
     if (!phone) return res.status(400).json({ error: 'Phone number required' });
 
     const rate = db.getLatestRate();
     if (!rate) return res.status(404).json({ error: 'No rates available yet — wait for group message' });
 
+    const comm = parseFloat(commission) || 0.01;
+
+    // Apply commission to all 4 rates
+    const cashBuyUsdt  = (rate.cash_sell + comm).toFixed(4);   // customer buys USDT (cash)
+    const usdtBuyMyr   = (rate.cash_buy  - comm).toFixed(4);   // customer sells USDT (cash)
+    const accBuyUsdt   = (rate.acc_sell  + comm).toFixed(4);   // customer buys USDT (acc)
+    const accSellToMyr = (rate.acc_buy   - comm).toFixed(4);   // customer sells USDT (acc)
+
     const msg =
 `CASH
-MYR → USDT : ${rate.cash_sell}
-USDT → MYR : ${rate.cash_buy}
+MYR BUY USDT : ${cashBuyUsdt}
+USDT BUY MYR : ${usdtBuyMyr}
 ACC
-MYR → USDT : ${rate.acc_sell}
-USDT → MYR : ${rate.acc_buy}
+MYR BUY USDT : ${accBuyUsdt}
+SELL BUY TO MYR : ${accSellToMyr}
 ▪️Only TRC20 is acceptable
 （仅接受TRC20）
 ▪️5 USDT Transaction Fees will be charged for USDT order below 10k
@@ -82,10 +90,10 @@ router.post('/quote', async (req, res) => {
     const commissionEarned = amt * comm;
 
     const msg =
-`💱 USDT/MYR Quote
+`USDT/MYR Quote
 Type: ${actionLabel}
 Amount: ${amt.toLocaleString()} USDT
-Rate: ${baseRate} ${action === 'buy' ? '+' : '-'} ${comm} = ${finalRate.toFixed(4)} MYR/USDT
+Rate: ${finalRate.toFixed(4)} MYR/USDT
 Total: MYR ${totalMyr.toFixed(2)}
 
 Rate valid for current session only.

@@ -33,7 +33,7 @@ export default function ExchangeForm({ rate }) {
     if (!phone) return alert('Enter customer phone number');
     setStatus1('sending');
     try {
-      await axios.post(`${API}/api/send/announcement`, { phone });
+      await axios.post(`${API}/api/send/announcement`, { phone, commission });
       setStatus1('sent');
     } catch (e) {
       setStatus1('error:' + (e.response?.data?.error || e.message));
