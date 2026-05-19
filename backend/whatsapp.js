@@ -79,10 +79,25 @@ function initWhatsApp(socketIo) {
   client.initialize();
 }
 
+function formatPhone(phone) {
+  let digits = phone.replace(/\D/g, '');
+  // Malaysian local format: 01X → 601X
+  if (digits.startsWith('0')) digits = '60' + digits.slice(1);
+  // If no country code yet, assume Malaysia
+  if (!digits.startsWith('60') && digits.length <= 10) digits = '60' + digits;
+  return digits + '@c.us';
+}
+
 async function sendMessage(phone, text) {
   if (!isReady) throw new Error('WhatsApp not connected');
-  const chatId = phone.replace(/\D/g, '') + '@c.us';
-  await client.sendMessage(chatId, text);
+  const chatId = formatPhone(phone);
+  console.log('Sending to chatId:', chatId);
+  try {
+    await client.sendMessage(chatId, text);
+  } catch (err) {
+    console.error('sendMessage error:', err);
+    throw new Error(err.message || JSON.stringify(err));
+  }
 }
 
 function getStatus() {
