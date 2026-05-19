@@ -26,7 +26,7 @@ MYR BUY USDT : ${cashBuyUsdt}
 USDT BUY MYR : ${usdtBuyMyr}
 ACC
 MYR BUY USDT : ${accBuyUsdt}
-SELL BUY TO MYR : ${accSellToMyr}
+USDT BUY MYR : ${accSellToMyr}
 ▪️Only TRC20 is acceptable
 （仅接受TRC20）
 ▪️5 USDT Transaction Fees will be charged for USDT order below 10k
@@ -62,35 +62,39 @@ router.post('/quote', async (req, res) => {
     const comm = parseFloat(commission) || 0.01;
     const amt  = parseFloat(amount);
 
-    let baseRate, finalRate, txType, actionLabel;
+    let baseRate, finalRate, txType, quoteTitle, actionLabel;
 
     if (action === 'buy' && method === 'cash') {
       baseRate = rate.cash_sell;
       finalRate = baseRate + comm;
       txType = 'BUY_CASH';
-      actionLabel = 'Buy USDT (Cash / 现金买入)';
+      quoteTitle = 'MYR/USDT Quote';
+      actionLabel = 'MYR Buy USDT (MYR现金买入USDT)';
     } else if (action === 'sell' && method === 'cash') {
       baseRate = rate.cash_buy;
       finalRate = baseRate - comm;
       txType = 'SELL_CASH';
-      actionLabel = 'Sell USDT (Cash / 现金卖出)';
+      quoteTitle = 'USDT/MYR Quote';
+      actionLabel = 'USDT Buy MYR (USDT买入MYR现金)';
     } else if (action === 'buy' && method === 'acc') {
       baseRate = rate.acc_sell;
       finalRate = baseRate + comm;
       txType = 'BUY_ACC';
-      actionLabel = 'Buy USDT (Bank In / 转账买入)';
+      quoteTitle = 'MYR/USDT Quote';
+      actionLabel = 'MYR Buy USDT (MYR BANK TRANSFER 买入USDT)';
     } else {
       baseRate = rate.acc_buy;
       finalRate = baseRate - comm;
       txType = 'SELL_ACC';
-      actionLabel = 'Sell USDT (Bank In / 转账卖出)';
+      quoteTitle = 'USDT/MYR Quote';
+      actionLabel = 'USDT Buy MYR (USDT买入MYR BANK TRANSFER)';
     }
 
     const totalMyr = amt * finalRate;
     const commissionEarned = amt * comm;
 
     const msg =
-`USDT/MYR Quote
+`${quoteTitle}
 Type: ${actionLabel}
 Amount: ${amt.toLocaleString()} USDT
 Rate: ${finalRate.toFixed(4)} MYR/USDT
