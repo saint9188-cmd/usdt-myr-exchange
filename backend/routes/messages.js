@@ -98,7 +98,7 @@ router.post('/quote', async (req, res) => {
 `${quoteTitle}
 Type: ${actionLabel}
 Amount: ${amt.toLocaleString()} USDT
-Rate: ${finalRate.toFixed(4)} MYR/USDT
+Rate: ${finalRate.toFixed(4)}
 Total: MYR ${totalMyr.toFixed(2)}
 
 Rate valid for current session only.
